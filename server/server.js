@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import connectDB from "./src/config/connectDB.js";
 import ratingRoutes from "./src/routes/rating.js";
 import employeesRoutes from "./src/routes/employees.js";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4444;
 app.use(express.json());
+app.use(cors());
 connectDB();
 
 app.use("/api", ratingRoutes);
