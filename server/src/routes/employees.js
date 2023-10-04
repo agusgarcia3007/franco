@@ -4,7 +4,6 @@ import Rating from "../models/rating.js";
 
 const router = express.Router();
 
-// Crear un nuevo empleado
 router.get("/employees", async (req, res) => {
   try {
     const employees = await Employee.find({});
@@ -27,14 +26,40 @@ router.get("/employees", async (req, res) => {
   }
 });
 
-router.get("/employee/:employeeID/rating", async (req, res) => {
+router.post("/employees", async (req, res) => {
   try {
-    const ratings = await Rating.find({ employeeID: req.params.employeeID });
-    const avgRating =
-      ratings.reduce((sum, r) => sum + r.rating, 0) / (ratings.length || 1);
-    res.status(200).send({ avgRating, voteCount: ratings.length });
-  } catch (err) {
-    res.status(500).send(err);
+    const employee = new Employee(req.body);
+    await employee.save();
+    res.status(201).send(employee);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.patch("/employees/:id", async (req, res) => {
+  try {
+    const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!employee) {
+      return res.status(404).send();
+    }
+    res.send(employee);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.delete("/employees/:id", async (req, res) => {
+  try {
+    const employee = await Employee.findByIdAndDelete(req.params.id);
+    if (!employee) {
+      return res.status(404).send();
+    }
+    res.send(employee);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 

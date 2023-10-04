@@ -1,6 +1,5 @@
 import express from "express";
 import Rating from "../models/rating.js";
-import Employee from "../models/employee.js";
 
 const router = express.Router();
 
@@ -20,12 +19,10 @@ router.post("/rating", async (req, res) => {
   }
 });
 
-router.get("/employee/:employeeID/rating", async (req, res) => {
+router.post("/reset", async (req, res) => {
   try {
-    const ratings = await Rating.find({ employeeID: req.params.employeeID });
-    const avgRating =
-      ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
-    res.status(200).send({ avgRating });
+    await Rating.deleteMany({});
+    res.status(200).send("All ratings reset");
   } catch (err) {
     res.status(500).send(err);
   }
