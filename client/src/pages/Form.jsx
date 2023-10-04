@@ -54,6 +54,7 @@ export default function Form({ setStep }) {
         alt="logo"
         src={logo}
         width={200}
+        height={200}
         preview={false}
         draggable={false}
       />
