@@ -1,0 +1,18 @@
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./src/config/connectDB.js";
+import ratingRoutes from "./src/routes/rating.js";
+import employeesRoutes from "./src/routes/employees.js";
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 4444;
+app.use(express.json());
+connectDB();
+
+app.use("/api", ratingRoutes);
+app.use("/api", employeesRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server started on http://localhost:${PORT}`);
+});
