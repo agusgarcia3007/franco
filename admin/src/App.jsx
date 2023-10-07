@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, Input, Table, message, Rate, Button, Dropdown } from "antd";
-import api from "../api/employees";
+import api from "./api/employees";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const Admin = () => {
