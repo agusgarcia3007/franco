@@ -1,27 +1,36 @@
-/* eslint-disable */
 import { useState, useEffect } from "react";
-import { Select, Button, Typography, Rate, notification, Image } from "antd";
+import { Button, Typography, notification, Image, Input, Spin } from "antd";
 import api from "../api/employees";
 import useVote from "../hooks/useVote";
 import logo from "../assets/logo.png";
+import Question from "../components/Question";
+import SelectEmployees from "../components/SelectEmployees";
 
-const { Option } = Select;
 const { Title } = Typography;
+const { TextArea } = Input;
 
 export default function Form({ setStep }) {
-  const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [rating, setRating] = useState(0);
-  const [requestStatus, setRequestStatus] = useState("idle");
   const { registerVote } = useVote();
+  const [employees, setEmployees] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [requestStatus, setRequestStatus] = useState("idle");
+  const [rating, setRating] = useState({
+    employeeID: null,
+    rating: 0,
+    experienceRating: 0,
+    comment: "",
+  });
 
   useEffect(() => {
     const getEmployees = async () => {
+      setIsLoading(true);
       try {
         const data = await api.getEmployees();
         setEmployees(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getEmployees();
@@ -30,12 +39,13 @@ export default function Form({ setStep }) {
   const handleSubmit = async () => {
     try {
       setRequestStatus("loading");
-      await api.rateEmployee(selectedEmployee, rating);
+      const avgRating = (rating.rating + rating.experienceRating) / 2;
+      await api.rateEmployee(rating.employeeID, avgRating, rating.comment);
       setRequestStatus("done");
       registerVote();
       notification.success({
-        message: "Thank you!",
-        description: "Your rating was submitted successfully.",
+        message: "Gracias!",
+        description: "Tu calificación ha sido registrada.",
       });
       setStep(1);
     } catch (error) {
@@ -43,16 +53,25 @@ export default function Form({ setStep }) {
       setRequestStatus("error");
       notification.error({
         message: "Oops!",
-        description: "Something went wrong. Please try again.",
+        description: "Algo salio mal intenta de nuevo.",
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
       <Image
         alt="logo"
         src={logo}
+        loading="lazy"
         width={200}
         height={200}
         preview={false}
@@ -62,34 +81,42 @@ export default function Form({ setStep }) {
         Como fue tu experiencia en Franco?
       </Title>
       <div className="form-container">
-        <Typography.Text>Quien te atendio?</Typography.Text>
-        <Select
-          value={selectedEmployee}
-          onChange={setSelectedEmployee}
-          placeholder="Elige una persona"
-          style={{ width: "100%", marginBottom: 16 }}
-        >
-          {employees.map((emp) => (
-            <Option key={emp.employee.id} value={emp.employee.id}>
-              {emp.employee.name}
-            </Option>
-          ))}
-        </Select>
-        <Typography.Text>Que puntuacion le darias?</Typography.Text>
-        <Rate
-          allowHalf
-          value={rating}
-          onChange={setRating}
-          style={{ marginBottom: 16, marginTop: 8, display: "block" }}
+        <SelectEmployees
+          setSelectedEmployee={(id) => setRating({ ...rating, employeeID: id })}
+          selectedEmployee={rating.employeeID}
+          employees={employees}
+        />
+        <Question
+          value={rating.rating}
+          handleChange={(value) => setRating({ ...rating, rating: value })}
+          question="Como calificarias a tu camarero?"
+        />
+        <Question
+          value={rating.experienceRating}
+          handleChange={(value) =>
+            setRating({ ...rating, experienceRating: value })
+          }
+          question="Como calificarias tu experiencia en FRANCO?"
+          subtitle="Tu honestidad nos ayuda a mejorar."
+        />
+
+        <TextArea
+          value={rating.comment}
+          onChange={(e) => setRating({ ...rating, comment: e.target.value })}
+          placeholder="Comentarios o sugerencias (opcional)"
+          autoSize={{ minRows: 3, maxRows: 5 }}
+          style={{ marginBottom: 16 }}
         />
         <Button
           type="primary"
           onClick={handleSubmit}
-          disabled={!selectedEmployee || !rating || requestStatus === "loading"}
+          disabled={
+            !rating.employeeID || !rating || requestStatus === "loading"
+          }
           loading={requestStatus === "loading"}
           block
         >
-          Submit
+          Enviar
         </Button>
       </div>
     </div>

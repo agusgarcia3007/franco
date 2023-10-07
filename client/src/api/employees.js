@@ -5,10 +5,11 @@ const getEmployees = async () => {
   return data;
 };
 
-const rateEmployee = async (employeeID, rating) => {
+const rateEmployee = async (employeeID, rating, comment) => {
   const { data } = await http.post("/rating", {
     employeeID,
     rating,
+    comment,
   });
   return data;
 };

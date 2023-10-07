@@ -10,15 +10,19 @@ const ThankYou = () => {
         <Title level={2}>
           <SmileOutlined /> ¡Gracias por tu opinión!
         </Title>
-        <Text>Nos ayuda a mejorar.</Text>
+        <Text style={{ fontSize: "16px" }}>Nos ayuda a mejorar.</Text>
 
         <div className="reward-section">
-          <Title level={4} className="reward-title">
+          <Title level={3} className="reward-title">
             <CoffeeOutlined /> ¡Tu opinión tiene recompensa!
           </Title>
           <Text>
-            Si calificas con <Text strong>5 estrellas</Text> y lo muestras en
-            caja, te llevas un <Text strong>Flat White gratis</Text>.
+            Si calificas con <Text strong>5 estrellas</Text> en{" "}
+            <Text strong>Google Maps</Text> y lo muestras en caja, te llevas un{" "}
+            <Text strong style={{ fontSize: "20px" }}>
+              Flat White GRATIS
+            </Text>
+            .
           </Text>
         </div>
 
