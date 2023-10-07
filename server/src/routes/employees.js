@@ -4,6 +4,21 @@ import Rating from "../models/rating.js";
 
 const router = express.Router();
 
+router.get("/comments", async (req, res) => {
+  try {
+    const comments = await Rating.find(
+      {
+        $and: [{ comment: { $ne: null } }, { comment: { $ne: "" } }],
+      },
+      "comment employeeID created_at"
+    ).sort({ createdAt: -1 });
+
+    res.status(200).send(comments);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 router.get("/employees", async (req, res) => {
   try {
     const employees = await Employee.find({});
@@ -11,8 +26,9 @@ router.get("/employees", async (req, res) => {
 
     for (const emp of employees) {
       const ratings = await Rating.find({ employeeID: emp._id });
-      const avgRating =
-        ratings.reduce((sum, r) => sum + r.rating, 0) / (ratings.length || 1);
+      const avgRating = +(
+        ratings.reduce((sum, r) => sum + r.rating, 0) / (ratings.length || 1)
+      ).toFixed(2);
       employeeData.push({
         employee: { name: emp.name, id: emp._id },
         avgRating,
