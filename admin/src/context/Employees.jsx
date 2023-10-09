@@ -7,6 +7,7 @@ const EmployeeContext = createContext();
 export const EmployeeProvider = ({ children }) => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
   const getEmployees = async () => {
     try {
@@ -20,13 +21,34 @@ export const EmployeeProvider = ({ children }) => {
     }
   };
 
+  const getReviews = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getComments();
+      setReviews(data);
+    } catch (error) {
+      notification.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getEmployees();
+    getReviews();
   }, []);
 
   return (
     <EmployeeContext.Provider
-      value={{ employees, setEmployees, loading, setLoading, getEmployees }}
+      value={{
+        employees,
+        setEmployees,
+        loading,
+        setLoading,
+        getEmployees,
+        reviews,
+        getReviews,
+      }}
     >
       {children}
     </EmployeeContext.Provider>
