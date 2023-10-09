@@ -20,9 +20,15 @@ const editEmployee = async (id, name) => {
   return data;
 };
 
+const getComments = async () => {
+  const { data } = await http.get("/comments");
+  return data;
+};
+
 export default {
   getEmployees,
   createEmployee,
   deleteEmployee,
   editEmployee,
+  getComments,
 };
