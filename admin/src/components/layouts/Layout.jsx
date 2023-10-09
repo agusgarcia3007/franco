@@ -17,7 +17,8 @@ const Layout = ({ children }) => {
 
   const handleOk = () => {
     updateTimestamp();
-    if (password === "admin5840") {
+    const encodedPassword = "YWRtaW41ODQw";
+    if (btoa(password) === encodedPassword) {
       setIsModalVisible(false);
     } else {
       notification.error("Contraseña incorrecta. Inténtalo de nuevo.");
