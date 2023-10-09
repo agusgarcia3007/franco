@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useLoginTimestamp from "../../hooks/useLoginTimestamp";
-import { notification, Modal, Input, Typography, Button } from "antd";
-import { Link, useLocation, useNavigation } from "react-router-dom";
+import { notification, Modal, Input, Typography, Button, Form } from "antd";
+import { Link, useLocation } from "react-router-dom";
 import EmployeeManager from "../EmployeeManager";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import api from "../../api/employees";
@@ -11,17 +11,18 @@ const Layout = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [password, setPassword] = useState("");
   const [isTimestampValid, updateTimestamp] = useLoginTimestamp();
-  const navigate = useNavigation();
   const { pathname } = useLocation();
   const { getEmployees } = useEmployees();
 
   const handleOk = () => {
     updateTimestamp();
-    const encodedPassword = "YWRtaW41ODQw";
+    const encodedPassword = "YWd1c2dhcmNpYTMwMDc=";
     if (btoa(password) === encodedPassword) {
       setIsModalVisible(false);
     } else {
-      notification.error("Contraseña incorrecta. Inténtalo de nuevo.");
+      notification.error({
+        message: "Contraseña incorrecta. Inténtalo de nuevo.",
+      });
     }
   };
 
@@ -53,14 +54,26 @@ const Layout = ({ children }) => {
           open={isModalVisible}
           onOk={handleOk}
           style={{ padding: "10px" }}
-          onCancel={() => navigate("/")}
+          cancelButtonProps={{ style: { display: "none" } }}
         >
-          <Input.Password
-            placeholder="Contraseña"
-            style={{ margin: "10px 10px" }}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Form onFinish={handleOk}>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, introduce tu contraseña",
+                },
+              ]}
+            >
+              <Input.Password
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onPressEnter={handleOk}
+              />
+            </Form.Item>
+          </Form>
         </Modal>
       ) : (
         <div>
