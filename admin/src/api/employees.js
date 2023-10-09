@@ -25,10 +25,16 @@ const getComments = async () => {
   return data;
 };
 
+const resetRatings = async () => {
+  const { data } = await http.post("/reset");
+  return data;
+};
+
 export default {
   getEmployees,
   createEmployee,
   deleteEmployee,
   editEmployee,
   getComments,
+  resetRatings,
 };

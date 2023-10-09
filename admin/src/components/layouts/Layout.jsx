@@ -4,6 +4,8 @@ import { notification, Modal, Input, Typography, Button } from "antd";
 import { Link, useLocation, useNavigation } from "react-router-dom";
 import EmployeeManager from "../EmployeeManager";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import api from "../../api/employees";
+import { useEmployees } from "../../context/Employees";
 
 const Layout = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
@@ -11,6 +13,7 @@ const Layout = ({ children }) => {
   const [isTimestampValid, updateTimestamp] = useLoginTimestamp();
   const navigate = useNavigation();
   const { pathname } = useLocation();
+  const { getEmployees } = useEmployees();
 
   const handleOk = () => {
     updateTimestamp();
@@ -19,6 +22,26 @@ const Layout = ({ children }) => {
     } else {
       notification.error("Contraseña incorrecta. Inténtalo de nuevo.");
     }
+  };
+
+  const handleReset = async () => {
+    Modal.confirm({
+      title: "¿Estás seguro?",
+      content:
+        "Todos los datos serán reseteados y esta acción no puede deshacerse.",
+      okText: "Sí, eliminar",
+      okType: "danger",
+      cancelText: "No, cancelar",
+      async onOk() {
+        try {
+          await api.resetRatings();
+          notification.success({ message: "Ratings reseteados" });
+          getEmployees();
+        } catch (error) {
+          notification.error({ message: "Error al resetear los ratings" });
+        }
+      },
+    });
   };
 
   return (
@@ -41,12 +64,22 @@ const Layout = ({ children }) => {
       ) : (
         <div>
           <Typography.Title>Franco Specialty Coffee</Typography.Title>
-          <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "3px",
+              alignItems: "center",
+              marginBottom: "10px",
+            }}
+          >
             {pathname === "/" ? (
               <>
                 <EmployeeManager actionType={"create"} />
-                <Button type="link">
-                  <Link to="/reviews">Reviews</Link>
+                <Link to="/reviews">
+                  <Button type="link">Reviews</Button>
+                </Link>
+                <Button danger type="default" onClick={handleReset}>
+                  Reset Ratings
                 </Button>
               </>
             ) : (
