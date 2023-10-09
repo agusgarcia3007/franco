@@ -72,8 +72,8 @@ export default function Form({ setStep }) {
         alt="logo"
         src={logo}
         loading="lazy"
-        width={200}
-        height={200}
+        width={130}
+        height={130}
         preview={false}
         draggable={false}
       />
