@@ -1,26 +1,13 @@
-# Endpoints
+## Getting Started
 
-### Get Ratings (GET)
-
-/api/employees
-
-### Rate (POST)
-
-/api/rate
+### Run
 
 ```
-{
-    "employeeId": string,
-    "rating": number
-}
+npm install
 ```
 
-### Create Employee (POST)
-
-/api/employee
+### Run
 
 ```
-{
-    "name": string
-}
+npm run install:all
 ```
