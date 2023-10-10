@@ -1,6 +1,14 @@
 import { useState } from "react";
 import useLoginTimestamp from "../../hooks/useLoginTimestamp";
-import { notification, Modal, Input, Typography, Button, Form } from "antd";
+import {
+  notification,
+  Modal,
+  Input,
+  Typography,
+  Button,
+  Form,
+  Checkbox,
+} from "antd";
 import { Link, useLocation } from "react-router-dom";
 import EmployeeManager from "../EmployeeManager";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -9,21 +17,37 @@ import { useEmployees } from "../../context/Employees";
 
 const Layout = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState({
+    usname: "",
+    password: "",
+    rememberMe: false,
+  });
   const [isTimestampValid, updateTimestamp] = useLoginTimestamp();
   const { pathname } = useLocation();
   const { getEmployees } = useEmployees();
 
-  const handleOk = () => {
+  console.log(user);
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleOk = async () => {
     updateTimestamp();
-    const encodedPassword = "YWd1c2dhcmNpYTMwMDc=";
-    if (btoa(password) === encodedPassword) {
-      setIsModalVisible(false);
-    } else {
-      notification.error({
-        message: "Contraseña incorrecta. Inténtalo de nuevo.",
-      });
+    const { username, password, rememberMe } = user;
+
+    if (!username || !password) {
+      return notification.error({ message: "Por favor, introduce los datos" });
     }
+
+    const { token, refreshToken } = await api.login({
+      username,
+      password,
+      rememberMe,
+    });
+
+    setIsModalVisible(false);
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
   };
 
   const handleReset = async () => {
@@ -58,6 +82,23 @@ const Layout = ({ children }) => {
         >
           <Form onFinish={handleOk}>
             <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, introduce el usuario",
+                },
+              ]}
+            >
+              <Input
+                placeholder="usuario"
+                value={user.name}
+                name="username"
+                onChange={handleChange}
+                onPressEnter={handleOk}
+              />
+            </Form.Item>
+            <Form.Item
               name="password"
               rules={[
                 {
@@ -68,10 +109,22 @@ const Layout = ({ children }) => {
             >
               <Input.Password
                 placeholder="Contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={user.password}
+                name="password"
+                onChange={handleChange}
                 onPressEnter={handleOk}
               />
+            </Form.Item>
+            <Form.Item>
+              <Checkbox
+                onChange={(e) =>
+                  setUser({ ...user, rememberMe: e.target.checked })
+                }
+                checked={user.rememberMe}
+                name="rememberMe"
+              >
+                Remember Me
+              </Checkbox>
             </Form.Item>
           </Form>
         </Modal>

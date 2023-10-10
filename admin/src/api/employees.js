@@ -30,6 +30,15 @@ const resetRatings = async () => {
   return data;
 };
 
+const login = async (username, password, rememberMe) => {
+  const { data } = await http.post("/login", {
+    username,
+    password,
+    rememberMe,
+  });
+  return data;
+};
+
 export default {
   getEmployees,
   createEmployee,
@@ -37,4 +46,5 @@ export default {
   editEmployee,
   getComments,
   resetRatings,
+  login,
 };

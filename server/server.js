@@ -12,6 +12,10 @@ app.use(express.json());
 app.use(cors());
 connectDB();
 
+app.get("/", (req, res) => {
+  res.send({ status: "online" });
+});
+
 app.use("/api", ratingRoutes);
 app.use("/api", employeesRoutes);
 

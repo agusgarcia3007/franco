@@ -1,23 +1,10 @@
 import express from "express";
 import Employee from "../models/employee.js";
 import Rating from "../models/rating.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
-
-router.get("/comments", async (req, res) => {
-  try {
-    const comments = await Rating.find(
-      {
-        $and: [{ comment: { $ne: null } }, { comment: { $ne: "" } }],
-      },
-      "comment employeeID created_at"
-    ).sort({ createdAt: -1 });
-
-    res.status(200).send(comments);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 router.get("/employees", async (req, res) => {
   try {
@@ -76,6 +63,32 @@ router.delete("/employees/:id", async (req, res) => {
     res.send(employee);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const fixedAdminPassword = "admin5840";
+  const secretKey = crypto.randomUUID();
+  try {
+    const { username, password, rememberMe } = req.body;
+
+    if (
+      username !== "admin" ||
+      !bcrypt.compareSync(password, await bcrypt.hash(fixedAdminPassword, 10))
+    ) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const accessToken = jwt.sign({ username }, secretKey, { expiresIn: "3h" });
+
+    let refreshToken = null;
+    if (rememberMe) {
+      refreshToken = jwt.sign({ username }, secretKey, { expiresIn: "7d" });
+    }
+
+    res.status(200).json({ accessToken, refreshToken });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

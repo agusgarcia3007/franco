@@ -28,4 +28,19 @@ router.post("/reset", async (req, res) => {
   }
 });
 
+router.get("/comments", async (req, res) => {
+  try {
+    const comments = await Rating.find(
+      {
+        $and: [{ comment: { $ne: null } }, { comment: { $ne: "" } }],
+      },
+      "comment employeeID created_at"
+    ).sort({ createdAt: -1 });
+
+    res.status(200).send(comments);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 export default router;
