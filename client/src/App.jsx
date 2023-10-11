@@ -18,15 +18,7 @@ const App = () => {
     { component: <ThankYou /> },
   ];
 
-  return (
-    <main
-      style={{
-        backgroundImage: "linear-gradient(to top, #dfe9f3 0%, white 100%)",
-      }}
-    >
-      {views[step]?.component || "404 - Page not found"}
-    </main>
-  );
+  return <>{views[step]?.component || "404 - Page not found"}</>;
 };
 
 export default App;
