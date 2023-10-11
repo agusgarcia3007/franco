@@ -18,7 +18,7 @@ model Rating {
   id         Int      @id @default(autoincrement())
   employeeID Int
   employee   Employee @relation(fields: [employeeID], references: [id])
-  comment    String
+  comment    String nullable
   rating     Int
   created_at  DateTime @default(now())
 }
