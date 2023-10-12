@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model Employee {
@@ -18,7 +18,7 @@ model Rating {
   id         Int      @id @default(autoincrement())
   employeeID Int
   employee   Employee @relation(fields: [employeeID], references: [id])
-  comment    String nullable
+  comment    String
   rating     Int
   created_at  DateTime @default(now())
 }
