@@ -21,7 +21,7 @@ router.post("/rating", async (req, res) => {
 
 router.post("/reset", async (req, res) => {
   try {
-    await Rating.deleteMany({});
+    await prisma.rating.deleteMany({});
     res.status(200).send("All ratings reset");
   } catch (err) {
     res.status(500).send(err);
