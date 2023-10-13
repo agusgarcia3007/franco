@@ -47,7 +47,7 @@ export default function Form({ setStep }) {
         message: "Gracias!",
         description: "Tu calificación ha sido registrada.",
       });
-      setStep(1);
+      setStep(2);
     } catch (error) {
       console.log(error);
       setRequestStatus("error");
@@ -78,7 +78,7 @@ export default function Form({ setStep }) {
         draggable={false}
       />
       <Title level={3} style={{ textAlign: "center" }}>
-        Como fue tu experiencia en Franco?
+        Como fue tu experiencia hoy en Franco?
       </Title>
       <div className="form-container">
         <SelectEmployees

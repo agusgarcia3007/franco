@@ -1,11 +1,21 @@
-import { Button, Typography, Row, Col } from "antd";
+import { Button, Typography, Row, Col, Image } from "antd";
 import { CoffeeOutlined, SmileOutlined } from "@ant-design/icons";
+import logo from "../assets/logo.png";
 
 const { Title, Text } = Typography;
 
 const ThankYou = () => {
   return (
     <Row justify="center" align="middle" className="thank-you-container">
+      <Image
+        alt="logo"
+        src={logo}
+        loading="lazy"
+        width={130}
+        height={130}
+        preview={false}
+        draggable={false}
+      />
       <Col xs={24} md={12} lg={8} className="content-container">
         <Title level={2}>
           <SmileOutlined /> ¡Gracias por tu opinión!
@@ -17,10 +27,12 @@ const ThankYou = () => {
             <CoffeeOutlined /> ¡Tu opinión tiene recompensa!
           </Title>
           <Text>
-            Si calificas con <Text strong>5 estrellas</Text> en{" "}
-            <Text strong>Google Maps</Text> y lo muestras en caja, te llevas un{" "}
+            Y no olvides, si nos regalas <Text strong>5 estrellas</Text> en{" "}
+            <Text strong>Google Maps</Text> y nos lo muestras en caja, te
+            regalamos una merienda especial que incluye un Flat White y un
+            Alfajor de Maicena <br />
             <Text strong style={{ fontSize: "20px" }}>
-              Flat White GRATIS
+              De Regalo!
             </Text>
             .
           </Text>
@@ -30,7 +42,7 @@ const ThankYou = () => {
           type="primary"
           size="large"
           className="maps-button"
-          href="https://www.google.com/maps"
+          href="https://maps.app.goo.gl/rKAHgQ8Rb8x8i1V56?g_st=ic"
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -1,5 +1,4 @@
 import { Rate, Typography } from "antd";
-
 const { Text } = Typography;
 
 const Question = ({ handleChange, value, question, subtitle }) => {
@@ -15,10 +14,14 @@ const Question = ({ handleChange, value, question, subtitle }) => {
         </Text>
       )}
       <Rate
-        allowHalf
         value={value}
         onChange={handleChange}
-        style={{ marginBottom: 16, marginTop: 8, display: "block" }}
+        style={{
+          marginBottom: 16,
+          marginTop: 8,
+          display: "block",
+          fontSize: 26,
+        }}
       />
     </>
   );
