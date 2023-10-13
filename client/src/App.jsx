@@ -20,7 +20,11 @@ const App = () => {
     { component: <ThankYou /> },
   ];
 
-  return <>{views[step]?.component || "404 - Page not found"}</>;
+  return (
+    <div style={{ overflow: "hidden" }}>
+      {views[step]?.component || "404 - Page not found"}
+    </div>
+  );
 };
 
 export default App;

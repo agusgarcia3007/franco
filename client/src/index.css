@@ -1,3 +1,9 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -22,7 +28,7 @@
 }
 
 .reward-section {
-  background-color: #fff2e8;
+  background-color: rgba(0, 136, 204, 0.15);
   padding: 16px;
   margin: 32px 0;
   border-radius: 8px;

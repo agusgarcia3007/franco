@@ -6,7 +6,7 @@ const { Title, Text } = Typography;
 
 const ThankYou = () => {
   return (
-    <Row justify="center" align="middle" className="thank-you-container">
+    <Row justify="center" align="middle" style={{ height: "100vh" }}>
       <Image
         alt="logo"
         src={logo}
