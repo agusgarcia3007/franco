@@ -7,21 +7,27 @@ const router = Router();
 
 router.get("/employees", async (req, res) => {
   try {
-    const employees = await prisma.employee.findMany()
-    
+    const employees = await prisma.employee.findMany();
+
     const employeeData = [];
 
     for (const emp of employees) {
       const ratings = await prisma.rating.findMany({
         where: { employeeID: emp.id },
-      })
+      });
       const avgRating = +(
         ratings.reduce((sum, r) => sum + r.rating, 0) / (ratings.length || 1)
       ).toFixed(2);
+
+      const comments = await prisma.rating.findMany({
+        where: { employeeID: emp.id },
+      });
+
       employeeData.push({
         employee: { name: emp.name, id: emp.id },
         avgRating,
         voteCount: ratings.length,
+        comments,
       });
     }
 
@@ -34,7 +40,7 @@ router.get("/employees", async (req, res) => {
 router.post("/employees", async (req, res) => {
   try {
     const employee = await prisma.employee.create({
-      data: req.body
+      data: req.body,
     });
     res.status(201).send(employee);
   } catch (error) {
@@ -46,8 +52,8 @@ router.patch("/employees/:id", async (req, res) => {
   try {
     const employee = await prisma.employee.update({
       where: { id: parseInt(req.params.id) },
-      data: req.body
-    })
+      data: req.body,
+    });
 
     if (!employee) {
       return res.status(404).send();
@@ -61,16 +67,16 @@ router.patch("/employees/:id", async (req, res) => {
 router.delete("/employees/:id", async (req, res) => {
   try {
     await prisma.rating.deleteMany({
-      where: { employeeID: parseInt(req.params.id) }
-    })
+      where: { employeeID: parseInt(req.params.id) },
+    });
     const employee = await prisma.employee.delete({
-      where: { id: parseInt(req.params.id) }
-    })
+      where: { id: parseInt(req.params.id) },
+    });
 
     if (!employee) {
       return res.status(404).send();
     }
-    res.send({ message: "Employee deleted successfully"});
+    res.send({ message: "Employee deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -78,7 +84,7 @@ router.delete("/employees/:id", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const fixedAdminPassword = "admin5840";
-  const secretKey = crypto.randomUUID();
+  const secretKey = "bote";
   try {
     const { username, password, rememberMe } = req.body;
 

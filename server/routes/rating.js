@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { prisma } from "../db-connect.js"
+import { prisma } from "../db-connect.js";
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.post("/rating", async (req, res) => {
     const newRating = await prisma.rating.create({ data: req.body });
     res.status(201).send(newRating);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).send(err);
   }
 });
@@ -25,24 +25,6 @@ router.post("/reset", async (req, res) => {
     res.status(200).send("All ratings reset");
   } catch (err) {
     res.status(500).send(err);
-  }
-});
-
-router.get("/comments", async (req, res) => {
-  try {
-
-    // from prisma get comments, employee name and 
-    const comments = await prisma.rating.findMany(
-      {
-        include: {
-          employee: true,
-        },
-      }
-    )
-    res.status(200).send(comments);
-  } catch (error) {
-    console.log(error)
-    res.status(500).send(error);
   }
 });
 

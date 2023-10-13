@@ -2,15 +2,22 @@ import { Table, Rate } from "antd";
 import Layout from "../components/layouts/Layout";
 import EmployeeManager from "../components/EmployeeManager";
 import { useEmployees } from "../context/Employees";
+import { Link } from "react-router-dom";
 
 const Employees = () => {
   const { loading, employees } = useEmployees();
   const columns = [
-    { title: "Nombre", dataIndex: ["employee", "name"], key: "name" },
+    {
+      title: "Nombre",
+      dataIndex: ["employee", "name"],
+      key: "name",
+      width: 150,
+    },
     {
       title: "ID",
       dataIndex: ["employee", "id"],
       key: "id",
+      width: 50,
       responsive: ["md", "lg", "xl", "xxl"],
     },
     {
@@ -18,6 +25,7 @@ const Employees = () => {
       dataIndex: "avgRating",
       sorter: (a, b) => a.avgRating - b.avgRating,
       key: "avgRating",
+      width: 200,
       render: (avgRating) => (
         <div
           style={{
@@ -35,11 +43,24 @@ const Employees = () => {
       title: "Cantidad de Votos",
       dataIndex: "voteCount",
       key: "voteCount",
+      width: 50,
       responsive: ["md", "lg", "xl", "xxl"],
+    },
+    {
+      title: "Comentarios",
+      key: "comments",
+      width: 75,
+      render: (record) =>
+        record.comments.length > 0 ? (
+          <Link to={`/reviews/${record.employee.id}`}>
+            Ver {record.comments.length} comentarios
+          </Link>
+        ) : null,
     },
     {
       title: "Acciones",
       key: "action",
+      width: 150,
       render: (record) => (
         <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
           <EmployeeManager employee={record.employee} actionType={"edit"} />
@@ -55,7 +76,8 @@ const Employees = () => {
         dataSource={employees}
         columns={columns}
         loading={loading}
-        rowKey={"employee.id"}
+        rowKey={(record) => record.employee.id}
+        scroll={{ x: "max-content" }}
       />
     </Layout>
   );
