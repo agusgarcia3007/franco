@@ -19,9 +19,16 @@ const Employees = () => {
       sorter: (a, b) => a.avgRating - b.avgRating,
       key: "avgRating",
       render: (avgRating) => (
-        <>
+        <div
+          style={{
+            display: "flex",
+            gap: "3px",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+          }}
+        >
           <Rate allowHalf disabled value={avgRating} /> <span>{avgRating}</span>
-        </>
+        </div>
       ),
     },
     {

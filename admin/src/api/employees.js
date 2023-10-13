@@ -30,7 +30,7 @@ const resetRatings = async () => {
   return data;
 };
 
-const login = async (username, password, rememberMe) => {
+const login = async ({ username, password, rememberMe }) => {
   const { data } = await http.post("/login", {
     username,
     password,

@@ -1,7 +1,25 @@
-import Employees from "./pages/Employees";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { Employees, Reviews, Login } from "./pages";
+import { useEffect } from "react";
 
 const App = () => {
-  return <Employees />;
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Employees />} />
+      <Route path="/reviews" element={<Reviews />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  );
 };
 
 export default App;
