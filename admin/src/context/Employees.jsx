@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { notification } from "antd";
 import api from "../api/employees";
+import { useLocation } from "react-router-dom";
 
 const EmployeeContext = createContext();
 
@@ -8,6 +9,7 @@ export const EmployeeProvider = ({ children }) => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const { pathname } = useLocation();
 
   const getEmployees = async () => {
     try {
@@ -34,9 +36,11 @@ export const EmployeeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getEmployees();
-    getReviews();
-  }, []);
+    if (pathname !== "/login") {
+      getEmployees();
+      getReviews();
+    }
+  }, [pathname]);
 
   return (
     <EmployeeContext.Provider
