@@ -1,11 +1,23 @@
 import { Typography, Button } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import EmployeeManager from "../EmployeeManager";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, LogoutOutlined } from "@ant-design/icons";
+import { notification } from "antd";
 import Reset from "../Reset";
 
 const Layout = ({ children }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+
+    notification.success({
+      message: "Hasta la próxima",
+    });
+    navigate("/");
+  };
 
   return (
     <div>
@@ -25,6 +37,12 @@ const Layout = ({ children }) => {
               <Button type="link">Reviews</Button>
             </Link>
             <Reset />
+            <Button
+              type="primary"
+              danger
+              icon={<LogoutOutlined />}
+              onClick={handleLogout}
+            />
           </>
         ) : (
           <Button shape="round" icon={<ArrowLeftOutlined />} type="primary">

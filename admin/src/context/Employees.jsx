@@ -38,7 +38,9 @@ export const EmployeeProvider = ({ children }) => {
   useEffect(() => {
     if (pathname !== "/login") {
       getEmployees();
-      getReviews();
+      if (pathname === "/reviews") {
+        getReviews();
+      }
     }
   }, [pathname]);
 
