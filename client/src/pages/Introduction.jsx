@@ -31,8 +31,12 @@ const Introduction = ({ setStep }) => {
         Al compartir tu opinión, no solo nos ayudas a mejorar, sino que también
         obtienes un <strong>30% de descuento</strong> en tu próxima compra.
         <br />Y hay más... si nos das{" "}
-        <strong>5 estrellas en Google Maps</strong>, celebramos tu apoyo con una
-        merienda. ¡Disfruta de un delicioso{" "}
+        <strong>5 estrellas en Google Maps</strong>, celebramos tu apoyo con una{" "}
+        <br />
+        <strong style={{ fontSize: "24px", fontWeight: "bold", color: "#08c" }}>
+          MERIENDA GRATIS.
+        </strong>
+        <br /> ¡Disfruta de un delicioso{" "}
         <strong>Flat White y un Alfajor de Maicena</strong> en tu próxima
         visita!
       </Paragraph>
@@ -42,7 +46,7 @@ const Introduction = ({ setStep }) => {
         onClick={() => setStep(1)}
         style={{ marginTop: "20px" }}
       >
-        Continuar
+        Comenzar
       </Button>
     </div>
   );

@@ -6,7 +6,7 @@ import logo from "../assets/logo.png";
 import Question from "../components/Question";
 import SelectEmployees from "../components/SelectEmployees";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function Form({ setStep }) {
@@ -80,6 +80,9 @@ export default function Form({ setStep }) {
       <Title level={3} style={{ textAlign: "center" }}>
         Como fue tu experiencia hoy en Franco?
       </Title>
+      <Text type="secondary" style={{ margin: "12px 0", textAlign: "center" }}>
+        Tu opinion es 100% anónima y nos ayuda a mejorar dia a dia
+      </Text>
       <div className="form-container">
         <SelectEmployees
           setSelectedEmployee={(id) => setRating({ ...rating, employeeID: id })}
