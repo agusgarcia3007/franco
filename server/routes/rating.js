@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../db-connect.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.post("/rating", async (req, res) => {
   }
 });
 
-router.post("/reset", async (req, res) => {
+router.post("/reset", authMiddleware, async (req, res) => {
   try {
     await prisma.rating.deleteMany({});
     res.status(200).send("All ratings reset");

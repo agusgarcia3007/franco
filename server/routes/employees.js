@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../db-connect.js";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
 
@@ -37,7 +37,7 @@ router.get("/employees", async (req, res) => {
   }
 });
 
-router.post("/employees", async (req, res) => {
+router.post("/employees", authMiddleware, async (req, res) => {
   try {
     const employee = await prisma.employee.create({
       data: req.body,
@@ -48,7 +48,7 @@ router.post("/employees", async (req, res) => {
   }
 });
 
-router.patch("/employees/:id", async (req, res) => {
+router.patch("/employees/:id", authMiddleware, async (req, res) => {
   try {
     const employee = await prisma.employee.update({
       where: { id: parseInt(req.params.id) },
@@ -64,7 +64,7 @@ router.patch("/employees/:id", async (req, res) => {
   }
 });
 
-router.delete("/employees/:id", async (req, res) => {
+router.delete("/employees/:id", authMiddleware, async (req, res) => {
   try {
     await prisma.rating.deleteMany({
       where: { employeeID: parseInt(req.params.id) },
@@ -84,22 +84,26 @@ router.delete("/employees/:id", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const fixedAdminPassword = "admin5840";
-  const secretKey = "bote";
   try {
     const { username, password, rememberMe } = req.body;
 
-    if (
-      username !== "admin" ||
-      !bcrypt.compareSync(password, await bcrypt.hash(fixedAdminPassword, 10))
-    ) {
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password required" });
+    }
+
+    if (password !== fixedAdminPassword && username !== "admin") {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const accessToken = jwt.sign({ username }, secretKey, { expiresIn: "3h" });
+    const accessToken = jwt.sign({ username }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-    let refreshToken = null;
+    let refreshToken;
     if (rememberMe) {
-      refreshToken = jwt.sign({ username }, secretKey, { expiresIn: "7d" });
+      refreshToken = jwt.sign({ username }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
     }
 
     res.status(200).json({ accessToken, refreshToken });

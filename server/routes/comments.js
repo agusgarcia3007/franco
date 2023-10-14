@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { prisma } from "../db-connect.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.get("/comments", async (req, res) => {
+router.get("/comments", authMiddleware, async (req, res) => {
   try {
     const comments = await prisma.rating.findMany({
       include: {
@@ -17,7 +18,7 @@ router.get("/comments", async (req, res) => {
   }
 });
 
-router.get("/comments/:employeeID", async (req, res) => {
+router.get("/comments/:employeeID", authMiddleware, async (req, res) => {
   try {
     const comments = await prisma.rating.findMany({
       where: {
