@@ -30,7 +30,7 @@ const ThankYou = () => {
             Y no olvides, si nos regalas <Text strong>5 estrellas</Text> en{" "}
             <Text strong>Google Maps</Text> y nos lo muestras en caja, te
             regalamos una merienda especial que incluye un Flat White y un
-            Alfajor de Maicena <br />
+            Alfajor <br />
             <Text strong style={{ fontSize: "20px" }}>
               De Regalo!
             </Text>

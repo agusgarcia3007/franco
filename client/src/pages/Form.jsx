@@ -80,7 +80,9 @@ export default function Form({ setStep }) {
       <Title level={3} style={{ textAlign: "center" }}>
         Como fue tu experiencia hoy en Franco?
       </Title>
-      <Text type="secondary" style={{ margin: "12px 0", textAlign: "center" }}>
+      <Text
+        style={{ marginBottom: "16px", fontSize: "16px", textAlign: "center" }}
+      >
         Tu opinion es 100% anónima y nos ayuda a mejorar dia a dia
       </Text>
       <div className="form-container">

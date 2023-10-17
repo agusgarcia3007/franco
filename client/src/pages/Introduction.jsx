@@ -37,8 +37,7 @@ const Introduction = ({ setStep }) => {
           MERIENDA GRATIS.
         </strong>
         <br /> ¡Disfruta de un delicioso{" "}
-        <strong>Flat White y un Alfajor de Maicena</strong> en tu próxima
-        visita!
+        <strong>Flat White y un Alfajor</strong> en tu próxima visita!
       </Paragraph>
       <Button
         type="primary"
