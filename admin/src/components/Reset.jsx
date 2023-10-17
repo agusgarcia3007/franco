@@ -3,7 +3,7 @@ import api from "../api/employees";
 import { useEmployees } from "../context/Employees";
 
 const Reset = () => {
-  const { getEmployees } = useEmployees();
+  const { getEmployees, reviews } = useEmployees();
   const handleReset = async () => {
     Modal.confirm({
       title: "¿Estás seguro?",
@@ -25,7 +25,12 @@ const Reset = () => {
   };
 
   return (
-    <Button danger type="default" onClick={handleReset}>
+    <Button
+      danger
+      type="default"
+      onClick={handleReset}
+      disabled={!reviews.length > 0}
+    >
       Reset Ratings
     </Button>
   );

@@ -4,8 +4,10 @@ import EmployeeManager from "../EmployeeManager";
 import { ArrowLeftOutlined, LogoutOutlined } from "@ant-design/icons";
 import { notification } from "antd";
 import Reset from "../Reset";
+import { useEmployees } from "../../context/Employees";
 
 const Layout = ({ children }) => {
+  const { reviews } = useEmployees();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -33,9 +35,13 @@ const Layout = ({ children }) => {
         {pathname === "/" ? (
           <>
             <EmployeeManager actionType={"create"} />
-            <Link to="/reviews">
-              <Button type="link">Reviews</Button>
-            </Link>
+            {reviews.length > 0 && (
+              <Link to="/reviews">
+                <Button type="link" disabled={!reviews.length > 0}>
+                  Reviews
+                </Button>
+              </Link>
+            )}
             <Reset />
             <Button
               type="primary"
