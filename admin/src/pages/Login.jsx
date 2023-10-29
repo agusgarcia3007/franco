@@ -1,4 +1,4 @@
-import { Form, Input, Checkbox, notification, Button, Typography } from "antd";
+import { Form, Input, notification, Button, Typography } from "antd";
 import { useState } from "react";
 import api from "../api/employees";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,6 @@ const Login = () => {
   const [user, setUser] = useState({
     username: "",
     password: "",
-    rememberMe: false,
   });
 
   const handleChange = (e) => {
@@ -19,7 +18,7 @@ const Login = () => {
   const handleOk = async () => {
     setLoading(true);
     try {
-      const { username, password, rememberMe } = user;
+      const { username, password } = user;
 
       if (!username || !password) {
         return notification.error({
@@ -30,7 +29,7 @@ const Login = () => {
       const { accessToken, refreshToken } = await api.login({
         username,
         password,
-        rememberMe,
+        rememberMe: true,
       });
 
       localStorage.setItem("token", accessToken);
@@ -88,16 +87,6 @@ const Login = () => {
             onChange={handleChange}
             value={user.password}
           />
-        </Form.Item>
-
-        <Form.Item name="rememberMe" valuePropName="checked">
-          <Checkbox
-            name="rememberMe"
-            onChange={(e) => setUser({ ...user, rememberMe: e.target.checked })}
-            value={user.rememberMe}
-          >
-            Remember me
-          </Checkbox>
         </Form.Item>
 
         <Form.Item
