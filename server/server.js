@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import ratingRoutes from "./routes/rating.js";
 import employeesRoutes from "./routes/employees.js";
 import commentsRoutes from "./routes/comments.js";
-import cors from "cors";
+import authRoutes from "./routes/auth.js";
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 app.use("/api", ratingRoutes);
 app.use("/api", employeesRoutes);
 app.use("/api", commentsRoutes);
+app.use("/api", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

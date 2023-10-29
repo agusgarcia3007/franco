@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { prisma } from "../db-connect.js";
-import jwt from "jsonwebtoken";
 import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
@@ -79,36 +78,6 @@ router.delete("/employees/:id", authMiddleware, async (req, res) => {
     res.send({ message: "Employee deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
-  }
-});
-
-router.post("/login", async (req, res) => {
-  const fixedAdminPassword = "admin5840";
-  try {
-    const { username, password, rememberMe } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ error: "Username and password required" });
-    }
-
-    if (password !== fixedAdminPassword && username !== "admin") {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    const accessToken = jwt.sign({ username }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    let refreshToken;
-    if (rememberMe) {
-      refreshToken = jwt.sign({ username }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
-      });
-    }
-
-    res.status(200).json({ accessToken, refreshToken });
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
   }
 });
 
